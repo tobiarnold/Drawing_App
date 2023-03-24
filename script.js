@@ -11,14 +11,14 @@ heading.innerHTML = coloredText;
 const eraserBtn = document.getElementById('eraserBtn');
 let isEraserActive = false;
 function toggleEraser() {
-  isEraserActive = !isEraserActive;
-  if (isEraserActive) {
-    eraserBtn.classList.add('active');
-    context.globalCompositeOperation = 'destination-out';
-  } else {
-    eraserBtn.classList.remove('active');
-    context.globalCompositeOperation = 'source-over';
-  }
+isEraserActive = !isEraserActive;
+if (isEraserActive) {
+eraserBtn.classList.add('active');
+context.globalCompositeOperation = 'destination-out';
+} else {
+eraserBtn.classList.remove('active');
+context.globalCompositeOperation = 'source-over';
+}
 }
 eraserBtn.addEventListener('click', toggleEraser);
 //Drawing App
@@ -35,49 +35,55 @@ let lineWidth = 5;
 let isErasing = false;
 //Zeichen Funktion
 function draw(e) {
-  if (!isDrawing) return;
+if (!isDrawing) return;
 //Radierer
-  if (isErasing) {
-    context.globalCompositeOperation = "destination-out";
-    context.strokeStyle = "rgba(0,0,0,1)";
-    context.lineWidth = 20;
+if (isErasing) {
+context.globalCompositeOperation = "destination-out";
+context.strokeStyle = "rgba(0,0,0,1)";
+context.lineWidth = 20;
 //Zeichnen
-  } else {
-    context.globalCompositeOperation = "source-over";
-    context.strokeStyle = document.getElementById("colorpicker").value;
-    context.lineWidth = lineWidth;
-  }
-  context.lineCap = "round";
-  context.lineJoin = "round";
-  context.beginPath();
-  context.moveTo(lastX, lastY);
-  context.lineTo(e.offsetX, e.offsetY);
-  context.stroke();
-  [lastX, lastY] = [e.offsetX, e.offsetY];
-  hue++;
+} else {
+context.globalCompositeOperation = "source-over";
+context.strokeStyle = document.getElementById("colorpicker").value;
+context.lineWidth = lineWidth;
 }
-//Mousedown
+context.lineCap = "round";
+context.lineJoin = "round";
+context.beginPath();
+context.moveTo(lastX, lastY);
+context.lineTo(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
+context.stroke();
+[lastX, lastY] = [e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY];
+hue++;
+}
+//Mousedown / Touchstart
 canvas.addEventListener("mousedown", (e) => {
-  isDrawing = true;
-  [lastX, lastY] = [e.offsetX, e.offsetY];
+isDrawing = true;
+[lastX, lastY] = [e.offsetX, e.offsetY];
 });
-//Mousemove
+canvas.addEventListener("touchstart", (e) => {
+isDrawing = true;
+[lastX, lastY] = [e.touches[0].pageX, e.touches[0].pageY];
+});
+//Mousemove / Touchmove
 canvas.addEventListener("mousemove", draw);
-//Mouseup
+canvas.addEventListener("touchmove", draw);
+//Mouseup / Touchend
 canvas.addEventListener("mouseup", () => (isDrawing = false));
+canvas.addEventListener("touchend", () => (isDrawing = false));
 canvas.addEventListener("mouseout", () => (isDrawing = false));
 //Liniendicke
 document.getElementById("lineWidth").addEventListener("change", (e) => {
-  lineWidth = e.target.value;
+lineWidth = e.target.value;
 });
 //Radierer
 document.getElementById("eraserBtn").addEventListener("click", () => {
-  isErasing = !isErasing;
+isErasing = !isErasing;
 });
 //Bild downloaden
 const saveButton = document.getElementById('save-button');
 const downloadLink = document.getElementById('download-link');
 saveButton.addEventListener('click', () => {
-  downloadLink.href = canvas.toDataURL();
-  downloadLink.click();
+downloadLink.href = canvas.toDataURL();
+downloadLink.click();
 });
