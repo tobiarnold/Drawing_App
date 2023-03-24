@@ -3,7 +3,7 @@ body {
 }
 canvas {
     width: 95vw;
-    height: 80vh;
+    height: 75vh;
     display: block;
   }
 .input-field {
