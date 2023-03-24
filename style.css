@@ -1,0 +1,35 @@
+body {
+  font-family:  "Open Sans", Arial;
+}
+canvas {
+    width: 95vw;
+    height: 80vh;
+    display: block;
+  }
+.input-field {
+  width: 50px;
+}
+.label_lineWidth{
+    margin-left: 10px;
+}
+.eraser {
+  margin-left: 10px;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: None;
+  cursor: pointer;
+}
+button.active {
+  background-color: lightgreen;
+}
+.download-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: None;
+  cursor: pointer;
+}

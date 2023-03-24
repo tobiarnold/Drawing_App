@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>✏️ Drawing App</title>
+</head>
+     <link rel="stylesheet" href="style.css">
+<body>
+  <header>
+    <h1 id="heading">🖼️ Malen wie Picasso</h1>
+  </header>
+    <canvas id="myCanvas" style="border:1px solid #d3d3d3;"></canvas>
+    <label for="colorpicker">Farbauswahl:</label>
+    <input type="color" id="colorpicker" value="#ff0000">
+     <label for="lineWidth" class="label_lineWidth">Liniendicke:</label>
+    <input id="lineWidth" type="number" value="5" class="input-field">
+    <button id="eraserBtn" class="eraser">Radiergummi</button>
+    <div id="save-container">
+    <button id="save-button" class="download-btn">Bild downloaden</button>
+    <a id="download-link" download="Wunderschönes_Bild.png"></a>
+    </div>
+ <script src="script.js"></script>  
+</body>
+</html>
