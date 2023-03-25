@@ -51,19 +51,28 @@ context.lineCap = "round";
 context.lineJoin = "round";
 context.beginPath();
 context.moveTo(lastX, lastY);
-context.lineTo(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop);
+if (e.touches) {
+context.lineTo(e.touches[0].pageX - canvas.offsetLeft, e.touches[0].pageY - canvas.offsetTop);
+lastX = e.touches[0].pageX - canvas.offsetLeft;
+lastY = e.touches[0].pageY - canvas.offsetTop;
+} else {
+context.lineTo(e.offsetX, e.offsetY);
+lastX = e.offsetX;
+lastY = e.offsetY;
+}
 context.stroke();
-[lastX, lastY] = [e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop];
 hue++;
 }
 //Mousedown / Touchstart
 canvas.addEventListener("mousedown", (e) => {
 isDrawing = true;
-[lastX, lastY] = [e.offsetX, e.offsetY];
+lastX = e.offsetX;
+lastY = e.offsetY;
 });
 canvas.addEventListener("touchstart", (e) => {
 isDrawing = true;
-[lastX, lastY] = [e.touches[0].pageX - canvas.offsetLeft, e.touches[0].pageY - canvas.offsetTop];
+lastX = e.touches[0].pageX - canvas.offsetLeft;
+lastY = e.touches[0].pageY - canvas.offsetTop;
 });
 //Mousemove / Touchmove
 canvas.addEventListener("mousemove", draw);
