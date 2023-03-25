@@ -10,22 +10,28 @@ heading.innerHTML = coloredText;
 // Verändern Farbe Radiergummi Button
 const eraserBtn = document.getElementById('eraserBtn');
 let isEraserActive = false;
+
 function toggleEraser() {
-isEraserActive = !isEraserActive;
-if (isEraserActive) {
-eraserBtn.classList.add('active');
-context.globalCompositeOperation = 'destination-out';
-} else {
-eraserBtn.classList.remove('active');
-context.globalCompositeOperation = 'source-over';
+  isEraserActive = !isEraserActive;
+
+  if (isEraserActive) {
+    eraserBtn.classList.add('active');
+    context.globalCompositeOperation = 'destination-out';
+  } else {
+    eraserBtn.classList.remove('active');
+    context.globalCompositeOperation = 'source-over';
+  }
 }
-}
+
 eraserBtn.addEventListener('click', toggleEraser);
+
 //Drawing App
 const canvas = document.getElementById("myCanvas");
 const context = canvas.getContext("2d");
+
 canvas.width = window.innerWidth * 0.95;
 canvas.height = window.innerHeight * 0.8;
+
 // Default Parameter
 let isDrawing = false;
 let lastX = 0;
@@ -33,57 +39,72 @@ let lastY = 0;
 let hue = 0;
 let lineWidth = 5;
 let isErasing = false;
+
 //Zeichen Funktion
 function draw(e) {
-if (!isDrawing) return;
-//Radierer
-if (isErasing) {
-context.globalCompositeOperation = "destination-out";
-context.strokeStyle = "rgba(0,0,0,1)";
-context.lineWidth = 20;
-//Zeichnen
-} else {
-context.globalCompositeOperation = "source-over";
-context.strokeStyle = document.getElementById("colorpicker").value;
-context.lineWidth = lineWidth;
+  if (!isDrawing) return;
+
+  //Radierer
+  if (isErasing) {
+    context.globalCompositeOperation = "destination-out";
+    context.strokeStyle = "rgba(0,0,0,1)";
+    context.lineWidth = 20;
+
+  //Zeichnen
+  } else {
+    context.globalCompositeOperation = "source-over";
+    context.strokeStyle = document.getElementById("colorpicker").value;
+    context.lineWidth = lineWidth;
+  }
+
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  context.beginPath();
+  context.moveTo(lastX, lastY);
+
+  const x = e.offsetX || e.touches[0].pageX - canvas.offsetLeft;
+  const y = e.offsetY || e.touches[0].pageY - canvas.offsetTop;
+
+  context.lineTo(x, y);
+  context.stroke();
+
+  [lastX, lastY] = [x, y];
+  hue++;
 }
-context.lineCap = "round";
-context.lineJoin = "round";
-context.beginPath();
-context.moveTo(lastX, lastY);
-context.lineTo(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
-context.stroke();
-[lastX, lastY] = [e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY];
-hue++;
-}
+
 //Mousedown / Touchstart
-canvas.addEventListener("mousedown", (e) => {
-isDrawing = true;
-[lastX, lastY] = [e.offsetX, e.offsetY];
+canvas.addEventListener("pointerdown", (e) => {
+  isDrawing = true;
+  [lastX, lastY] = [e.offsetX, e.offsetY];
 });
-canvas.addEventListener("touchstart", (e) => {
-isDrawing = true;
-[lastX, lastY] = [e.touches[0].pageX, e.touches[0].pageY];
-});
+
 //Mousemove / Touchmove
-canvas.addEventListener("mousemove", draw);
-canvas.addEventListener("touchmove", draw);
+canvas.addEventListener("pointermove", draw);
+
 //Mouseup / Touchend
-canvas.addEventListener("mouseup", () => (isDrawing = false));
-canvas.addEventListener("touchend", () => (isDrawing = false));
-canvas.addEventListener("mouseout", () => (isDrawing = false));
+canvas.addEventListener("pointerup", () => {
+  isDrawing = false;
+});
+
+canvas.addEventListener("pointerleave", () => {
+  isDrawing = false;
+});
+
 //Liniendicke
 document.getElementById("lineWidth").addEventListener("change", (e) => {
-lineWidth = e.target.value;
+  lineWidth = e.target.value;
 });
+
 //Radierer
 document.getElementById("eraserBtn").addEventListener("click", () => {
-isErasing = !isErasing;
+  isErasing = !isErasing;
 });
+
 //Bild downloaden
 const saveButton = document.getElementById('save-button');
 const downloadLink = document.getElementById('download-link');
+
 saveButton.addEventListener('click', () => {
-downloadLink.href = canvas.toDataURL();
-downloadLink.click();
+  downloadLink.href = canvas.toDataURL();
+  downloadLink.click();
 });
