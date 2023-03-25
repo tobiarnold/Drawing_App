@@ -4,7 +4,8 @@ let heading = document.getElementById("heading");
 let text = heading.innerHTML;
 let coloredText = "";
 for (let i = 0; i < text.length; i++) {
-  coloredText += `<span style="color: hsl(${(i * 360) / text.length}, 100%, 50%)">${text[i]}</span>`;}
+  coloredText += `<span style="color: hsl(${(i * 360) / text.length}, 100%, 50%)">${text[i]}</span>`;
+}
 heading.innerHTML = coloredText;
 // Verändern Farbe Radiergummi Button
 const eraserBtn = document.getElementById('eraserBtn');
@@ -17,7 +18,8 @@ context.globalCompositeOperation = 'destination-out';
 } else {
 eraserBtn.classList.remove('active');
 context.globalCompositeOperation = 'source-over';
-}}
+}
+}
 eraserBtn.addEventListener('click', toggleEraser);
 //Drawing App
 const canvas = document.getElementById("myCanvas");
@@ -49,23 +51,19 @@ context.lineCap = "round";
 context.lineJoin = "round";
 context.beginPath();
 context.moveTo(lastX, lastY);
-// aktualisiere lastX und lastY mit der aktuellen Position des Mauszeigers
-lastX = e.pageX - canvas.offsetLeft;
-lastY = e.pageY - canvas.offsetTop;
-context.lineTo(lastX, lastY);
+context.lineTo(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
 context.stroke();
+[lastX, lastY] = [e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY];
 hue++;
 }
 //Mousedown / Touchstart
 canvas.addEventListener("mousedown", (e) => {
 isDrawing = true;
-lastX = e.pageX - canvas.offsetLeft;
-lastY = e.pageY - canvas.offsetTop;
+[lastX, lastY] = [e.offsetX, e.offsetY];
 });
 canvas.addEventListener("touchstart", (e) => {
 isDrawing = true;
-lastX = e.touches[0].pageX - canvas.offsetLeft;
-lastY = e.touches[0].pageY - canvas.offsetTop;
+[lastX, lastY] = [e.touches[0].pageX, e.touches[0].pageY];
 });
 //Mousemove / Touchmove
 canvas.addEventListener("mousemove", draw);
